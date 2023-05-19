@@ -1,10 +1,16 @@
 <template>
-  <router-view />
+  <Home></Home>
 </template>
 
-<style lang="scss">
-#app {
-  width: 100%;
-  height: 100%;
-}
+<script>
+import Home from './views/Home.vue';
+export default {
+  name: "App",
+  components: {
+    Home,
+  },
+};
+</script>
+<style lang="scss" scoped>
+  
 </style>
