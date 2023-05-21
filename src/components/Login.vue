@@ -141,12 +141,15 @@ function usernameLog(){
     axios({
     method:"post",
     url:"/user/login",
+    headers:{
+      "Access-Control-Allow-Credentials":true
+    },
     data:{
       "username":ruleForm.username,
       "password":ruleForm.password
     }
   }).then((res:any)=>{
-    console.log(res.data.msg);
+    console.log(res);
     if(res.data.msg==="登录成功"){
       isShowLogin.value=false;
       ElMessage({

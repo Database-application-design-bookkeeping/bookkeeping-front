@@ -16,7 +16,7 @@
         </el-row>
       </el-header>
       <el-container class="full-height">
-        <el-aside width="280px" class="full-height">
+        <el-aside width="220px" class="full-height">
           <el-menu
         default-active="2"
         class="el-menu-vertical-demo full-height"
