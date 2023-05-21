@@ -1,6 +1,6 @@
 <template>
   <div class="data-view">
-    
+    data-view
   </div>
 </template>
 

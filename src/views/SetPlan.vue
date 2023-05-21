@@ -1,6 +1,6 @@
 <template>
-  <div class="seet-plan">
-    
+  <div class="set-plan">
+    set-plan
   </div>
 </template>
 

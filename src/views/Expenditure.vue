@@ -1,6 +1,6 @@
 <template>
   <div class="expenditure">
-
+    expenditure
   </div>
 </template>
 

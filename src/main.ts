@@ -10,7 +10,7 @@ const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
   }
-axios.defaults.baseURL = 'http://www.managexpr.com/jizhang';
+axios.defaults.baseURL = 'http://www.managexpr.com:9001/jizhang';
 app.use(store);
 app.use(router);
 installElementPlus(app);

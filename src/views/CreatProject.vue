@@ -1,5 +1,7 @@
 <template>
-  <div class="creat-project"></div>
+  <div class="creat-project">
+    creat-project
+  </div>
 </template>
 
 <script setup lang="ts">

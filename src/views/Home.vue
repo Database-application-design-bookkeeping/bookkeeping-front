@@ -1,14 +1,25 @@
 <template>
   <div class="home">
     <el-container class="full-height">
-      <el-header>Header</el-header>
+      <el-header class="header-box" height="50px">
+        <el-row class="grid-box">
+          <el-col :span="4"><div class="grid-content" /></el-col>
+          <el-col :span="4"><div class="grid-content" /></el-col>
+          <el-col :span="4"><div class="grid-content" /></el-col>
+          <el-col :span="4"><div class="grid-content" /></el-col>
+          <el-col :span="4"><div class="grid-content" /></el-col>
+          <el-col :span="4"><div class="grid-content" />
+            <div class="box-login box-right" @click="showLoginView('登录',false)">登录</div>
+            <div class="box-item box-right">或</div>
+            <div class="box-register box-right" @click="showLoginView('注册',false)">注册</div>
+          </el-col>
+        </el-row>
+      </el-header>
       <el-container class="full-height">
         <el-aside width="280px" class="full-height">
           <el-menu
         default-active="2"
         class="el-menu-vertical-demo full-height"
-        @open="handleOpen"
-        @close="handleClose"
         router="true"
       >
         <el-sub-menu index="1">
@@ -31,20 +42,20 @@
             <el-icon><Wallet /></el-icon>
             <span>我的理财计划</span>
           </template>
-          <el-menu-item index="2-1">
+          <el-menu-item index="/creatproject">
             <el-icon><FolderAdd /></el-icon>
             <span>新建项目</span>
           </el-menu-item>
-          <el-menu-item index="2-2">
+          <el-menu-item index="/setplan">
             <el-icon><Finished /></el-icon>
             <span>设置本月花费计划</span>
           </el-menu-item>
         </el-sub-menu>
-        <el-menu-item index="3">
+        <el-menu-item index="/dataview">
           <el-icon><DataLine /></el-icon>
           <span>数据一览</span>
         </el-menu-item>
-        <el-menu-item index="4">
+        <el-menu-item index="/setting">
           <el-icon><setting /></el-icon>
           <span>设置</span>
         </el-menu-item>
@@ -57,7 +68,7 @@
     </el-container>
     
   </div>
-  <Login :isShow="isShow"></Login>
+  <Login ref="login"></Login>
 </template>
 
 <script lang="ts">
@@ -71,12 +82,9 @@ export default {
 </script>
 <script setup lang="ts">
 import {ref} from "vue"
-const isShow = ref<boolean>(true)
-const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
-const handleClose = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
+let login = ref(null)
+function showLoginView(type:string,isSwitch:boolean){
+  login.value.switchLoginMsg(type,isSwitch)
 }
 </script>
 
@@ -84,6 +92,31 @@ const handleClose = (key: string, keyPath: string[]) => {
   .home{
     width: 100%;
     height: 100%;
+    .header-box{
+      text-align: center;
+      .grid-box{
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        .grid-content {
+          border-radius: 4px;
+        }
+        .box-right{
+          display: inline-block;
+          color: rgb(89,89,89);
+          font-size: 14px;
+        }
+        .box-login,.box-register{
+          cursor: pointer;
+        }
+        .box-item{
+          margin: 0 10px;
+        }
+      }
+      
+    }
+    
+    
     .full-height{
       height: 100%;
     }

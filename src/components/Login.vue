@@ -1,8 +1,8 @@
 <template>
-  <div class="login" v-if="isShow">
+  <div class="login" v-if="isShowLogin">
     <div class="mask">
       <div class="container">
-        <div class="close"><el-icon class="close-bold" @click="isShow=false"><CloseBold /></el-icon></div>
+        <div class="close"><el-icon class="close-bold" @click="isShowLogin=false"><CloseBold /></el-icon></div>
         <div class="login-head">
           布克瓶记账
         </div>
@@ -13,6 +13,14 @@
           status-icon
           class="demo-ruleForm"
         >
+        <el-form-item prop="email" v-if="loginMsg.type==='注册'">
+            <el-input
+              class="login-content"
+              v-model="ruleForm.email"
+              autocomplete="off"
+              placeholder="请输入邮箱"
+            />
+          </el-form-item>
           <el-form-item prop="username">
             <el-input
               class="login-content"
@@ -39,14 +47,6 @@
               placeholder="确认密码"
             />
           </el-form-item>
-          <el-form-item prop="email" v-if="loginMsg.type==='注册'">
-            <el-input
-              class="login-content"
-              v-model="ruleForm.email"
-              autocomplete="off"
-              placeholder="请输入邮箱"
-            />
-          </el-form-item>
           <el-form-item prop="email"  v-if="loginMsg.title==='邮箱登录'">
             <el-input
               class="login-content"
@@ -58,8 +58,8 @@
           </el-form-item>
           <el-form-item>
             <div class="itme-box">
-              <div class="login-item" @click="switchLoginMsg('登录')">{{ loginMsg.leftItem }}</div>
-              <div class="login-item" @click="switchLoginMsg('注册')" v-if="loginMsg.type==='登录'">{{ loginMsg.rightItem }}</div>
+              <div class="login-item" @click="switchLoginMsg('登录',true)">{{ loginMsg.leftItem }}</div>
+              <div class="login-item" @click="switchLoginMsg('注册',true)" v-if="loginMsg.type==='登录'">{{ loginMsg.rightItem }}</div>
             </div>
           </el-form-item>
           <el-form-item>
@@ -76,14 +76,12 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { reactive, ref, defineProps } from "vue";
+import { reactive, ref  } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import axios from 'axios';
 import { ElMessage } from 'element-plus'
-const props = defineProps({
-        isShow: Boolean
-    })
-let isShow = ref<boolean>(props.isShow)
+let isShowLogin = ref<boolean>(true)
+//界面信息
 let loginMsg = reactive({
     title:"账号密码登录",
     type:"登录",
@@ -91,6 +89,8 @@ let loginMsg = reactive({
     rightItem:"注册",
     placeholder:"请输入用户名"
 });
+
+//清空&初始化表单
 function initForm(){
   ruleForm.username= "";
   ruleForm.password= "";
@@ -98,15 +98,18 @@ function initForm(){
   ruleForm.email= "";
   ruleForm.verificationCode= "";
 }
-function switchLoginMsg(data:string){
-  if(data==="登录"){
+
+//切换界面信息
+function switchLoginMsg(data:String,isSwitch?:Boolean){
+  isShowLogin.value = true;
+  if(data==="登录"||data===""){
     if(loginMsg.leftItem==="账号登录"){
       loginMsg.title = "账号密码登录";
       loginMsg.type = "登录";
       loginMsg.leftItem = "邮箱登录";
       loginMsg.rightItem = "注册";
       loginMsg.placeholder="请输入用户名"
-    }else if(loginMsg.leftItem==="邮箱登录"){
+    }else if(loginMsg.leftItem==="邮箱登录"&&isSwitch){
       loginMsg.title = "邮箱登录";
       loginMsg.type = "登录";
       loginMsg.leftItem = "账号登录";
@@ -124,6 +127,7 @@ function switchLoginMsg(data:string){
 }
 const ruleFormRef = ref<FormInstance>();
 
+//表单信息
 const ruleForm = reactive({
   username: "",
   password: "",
@@ -131,6 +135,8 @@ const ruleForm = reactive({
   email: "",
   verificationCode: "",
 });
+
+//账号密码登录
 function usernameLog(){
     axios({
     method:"post",
@@ -142,8 +148,11 @@ function usernameLog(){
   }).then((res:any)=>{
     console.log(res.data.msg);
     if(res.data.msg==="登录成功"){
-      isShow.value=false;
-      ElMessage("登录成功")
+      isShowLogin.value=false;
+      ElMessage({
+        message:res.data.msg,
+        type:"success"
+      })
     }else{
       ElMessage({
         message: res.data.msg,
@@ -157,6 +166,8 @@ function usernameLog(){
       })
   })
 }
+
+//注册
 function register(){
   axios({
     method:"post",
@@ -172,7 +183,7 @@ function register(){
         message: res.data.msg,
         type: 'success',
       })
-      switchLoginMsg("登录")
+      switchLoginMsg("登录",true)
     }
   }).catch((err:any)=>{
     ElMessage({
@@ -182,14 +193,20 @@ function register(){
   })
 }
 
+//登录方式判断
 function log(){
   if(loginMsg.type==="登录"){
-    usernameLog();
+    if(loginMsg.title==="账号密码登录"){
+      usernameLog();
+    }else if(loginMsg.title==="邮箱登录"){
+      emailLog();
+    }
   }else if(loginMsg.type==="注册"){
     register();
   }
 }
 
+//发送邮箱验证码
 function sendVerificationCode(){
   axios({
     url:"/user/sendCode",
@@ -198,7 +215,10 @@ function sendVerificationCode(){
     }
   }).then((res:any)=>{
     if(res.data.msg==="邮箱验证码发送成功"){
-      ElMessage(res.data.msg);
+      ElMessage({
+        message:res.data.msg,
+        type:"success"
+      });
     }else{
       ElMessage({
         message:res.data.msg,
@@ -213,6 +233,7 @@ function sendVerificationCode(){
   })
 }
 
+//邮箱登录
 function emailLog(){
   axios({
     url:"/user/loginByEmail",
@@ -222,8 +243,11 @@ function emailLog(){
     }
   }).then((res:any)=>{
     if(res.data.msg==="登录成功"){
-      ElMessage(res.data.msg);
-      isShow.value = false
+      ElMessage({
+        message:res.data.msg,
+        type:"success"
+      });
+      isShowLogin.value = false
     }else{
       ElMessage({
         message:res.data.msg,
@@ -237,6 +261,9 @@ function emailLog(){
       })
   })
 }
+defineExpose({
+  switchLoginMsg
+})
 </script>
 
 <style lang="scss" scoped>
