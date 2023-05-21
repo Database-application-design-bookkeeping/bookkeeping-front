@@ -1,6 +1,6 @@
 <template>
-  <div class="expenditure">
-
+  <div class="data-view">
+    
   </div>
 </template>
 

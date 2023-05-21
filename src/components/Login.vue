@@ -18,7 +18,7 @@
               class="login-content"
               v-model="ruleForm.username"
               autocomplete="off"
-              placeholder="请输入用户名"
+              :placeholder="loginMsg.placeholder"
             />
           </el-form-item>
           <el-form-item prop="password" v-if="loginMsg.title==='账号密码登录'||loginMsg.type==='注册'">
@@ -59,11 +59,11 @@
           <el-form-item>
             <div class="itme-box">
               <div class="login-item" @click="switchLoginMsg('登录')">{{ loginMsg.leftItem }}</div>
-              <div class="login-item" @click="switchLoginMsg('注册')">{{ loginMsg.rightItem }}</div>
+              <div class="login-item" @click="switchLoginMsg('注册')" v-if="loginMsg.type==='登录'">{{ loginMsg.rightItem }}</div>
             </div>
           </el-form-item>
           <el-form-item>
-            <el-button class="login-content" @click="logIn" type="primary">{{ loginMsg.type }}</el-button>
+            <el-button class="login-content" @click="log" type="primary">{{ loginMsg.type }}</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -89,6 +89,7 @@ let loginMsg = reactive({
     type:"登录",
     leftItem:"邮箱登录",
     rightItem:"注册",
+    placeholder:"请输入用户名"
 });
 function initForm(){
   ruleForm.username= "";
@@ -104,17 +105,20 @@ function switchLoginMsg(data:string){
       loginMsg.type = "登录";
       loginMsg.leftItem = "邮箱登录";
       loginMsg.rightItem = "注册";
+      loginMsg.placeholder="请输入用户名"
     }else if(loginMsg.leftItem==="邮箱登录"){
       loginMsg.title = "邮箱登录";
       loginMsg.type = "登录";
       loginMsg.leftItem = "账号登录";
       loginMsg.rightItem = "注册";
+      loginMsg.placeholder = "请输入邮箱"
     }
   }else if(data==="注册"){
       loginMsg.title = "注册账号";
       loginMsg.type = "注册";
       loginMsg.leftItem = "账号登录";
       loginMsg.rightItem = "注册";
+      loginMsg.placeholder = "请输入用户名"
   }
   initForm()
 }
@@ -127,8 +131,8 @@ const ruleForm = reactive({
   email: "",
   verificationCode: "",
 });
-function logIn(){
-  axios({
+function usernameLog(){
+    axios({
     method:"post",
     url:"/user/login",
     data:{
@@ -139,12 +143,18 @@ function logIn(){
     console.log(res.data.msg);
     if(res.data.msg==="登录成功"){
       isShow.value=false;
+      ElMessage("登录成功")
     }else{
       ElMessage({
         message: res.data.msg,
         type: 'warning',
   })
     }
+  }).catch((err:any)=>{
+    ElMessage({
+        message:err,
+        type:"warning"
+      })
   })
 }
 function register(){
@@ -164,8 +174,22 @@ function register(){
       })
       switchLoginMsg("登录")
     }
+  }).catch((err:any)=>{
+    ElMessage({
+        message:err,
+        type:"warning"
+      })
   })
 }
+
+function log(){
+  if(loginMsg.type==="登录"){
+    usernameLog();
+  }else if(loginMsg.type==="注册"){
+    register();
+  }
+}
+
 function sendVerificationCode(){
   axios({
     url:"/user/sendCode",
@@ -174,13 +198,43 @@ function sendVerificationCode(){
     }
   }).then((res:any)=>{
     if(res.data.msg==="邮箱验证码发送成功"){
-
+      ElMessage(res.data.msg);
     }else{
       ElMessage({
         message:res.data.msg,
         type:"warning"
       })
     }
+  }).catch((err:any)=>{
+    ElMessage({
+        message:err,
+        type:"warning"
+      })
+  })
+}
+
+function emailLog(){
+  axios({
+    url:"/user/loginByEmail",
+    data:{
+      "email":ruleForm.email,
+      "code":ruleForm.verificationCode
+    }
+  }).then((res:any)=>{
+    if(res.data.msg==="登录成功"){
+      ElMessage(res.data.msg);
+      isShow.value = false
+    }else{
+      ElMessage({
+        message:res.data.msg,
+        type:"warning"
+      })
+    }
+  }).catch((err:any)=>{
+    ElMessage({
+        message:err,
+        type:"warning"
+      })
   })
 }
 </script>

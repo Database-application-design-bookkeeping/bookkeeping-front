@@ -1,6 +1,6 @@
 <template>
-  <div class="expenditure">
-
+  <div class="seet-plan">
+    
   </div>
 </template>
 

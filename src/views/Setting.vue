@@ -1,6 +1,6 @@
 <template>
-  <div class="expenditure">
-
+  <div class="setting">
+    
   </div>
 </template>
 
