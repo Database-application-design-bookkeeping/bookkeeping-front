@@ -1,19 +1,13 @@
 const { defineConfig } = require("@vue/cli-service");
 module.exports = defineConfig({
-    server:{
-        port:9001
-    },
+    devServer: {
+        proxy: {
+          "/api": {
+            target: "http://www.managexpr.com:9001/jizhang", // 需要代理的后端接口
+            // changeOrigin: true, //开启代理：在本地会创建一个虚拟服务端，然后发送请求的数据，并同时接收请求
+          },
+        },
+      },
   transpileDependencies: true,
   lintOnSave: false,
-  /* proxy: {
-    '/api': {
-        target: 'http://www.managexpr.com/jizhang', //接口域名
-        changeOrigin: true,             //是否跨域
-        ws: true,                       //是否代理 websockets
-        secure: false,                   //是否https接口
-        pathRewrite: {                  //路径重置
-            '^/api': ''
-        }
-    }
-} */
 });

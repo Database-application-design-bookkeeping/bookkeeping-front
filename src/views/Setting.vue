@@ -6,7 +6,6 @@
           status-icon
           class="demo-ruleForm"
         >
-        
           <el-form-item prop="username">
             <el-input
               class="login-content"

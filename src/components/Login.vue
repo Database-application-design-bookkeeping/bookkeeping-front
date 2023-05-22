@@ -89,7 +89,18 @@ let loginMsg = reactive({
     rightItem:"注册",
     placeholder:"请输入用户名"
 });
-
+let userMsg = reactive({
+  token:"",
+  username:""
+})
+function setToken(token:string,username:string){
+  if(localStorage.getItem("token")){
+    isShowLogin.value = false
+  }else{
+    localStorage.setItem("token",token);
+    localStorage.setItem("username",username);
+  }
+}
 //清空&初始化表单
 function initForm(){
   ruleForm.username= "";
@@ -141,17 +152,14 @@ function usernameLog(){
     axios({
     method:"post",
     url:"/user/login",
-    headers:{
-      "Access-Control-Allow-Credentials":true
-    },
     data:{
       "username":ruleForm.username,
       "password":ruleForm.password
     }
   }).then((res:any)=>{
-    console.log(res);
     if(res.data.msg==="登录成功"){
       isShowLogin.value=false;
+      setToken(res.data.data.token,res.data.data.username)
       ElMessage({
         message:res.data.msg,
         type:"success"
@@ -264,6 +272,7 @@ function emailLog(){
       })
   })
 }
+//暴露切换页面信息的函数
 defineExpose({
   switchLoginMsg
 })

@@ -3,12 +3,12 @@
     <el-container class="full-height">
       <el-header class="header-box" height="50px">
         <el-row class="grid-box">
-          <el-col :span="4"><div class="grid-content" /></el-col>
-          <el-col :span="4"><div class="grid-content" /></el-col>
-          <el-col :span="4"><div class="grid-content" /></el-col>
-          <el-col :span="4"><div class="grid-content" /></el-col>
-          <el-col :span="4"><div class="grid-content" /></el-col>
-          <el-col :span="4"><div class="grid-content" />
+          <el-col :span="4"></el-col>
+          <el-col :span="4"></el-col>
+          <el-col :span="4"></el-col>
+          <el-col :span="4"></el-col>
+          <el-col :span="4"></el-col>
+          <el-col :span="4" style="min-width: 130px;">
             <div class="box-login box-right" @click="showLoginView('登录',false)">登录</div>
             <div class="box-item box-right">或</div>
             <div class="box-register box-right" @click="showLoginView('注册',false)">注册</div>
@@ -98,9 +98,6 @@ function showLoginView(type:string,isSwitch:boolean){
         height: 100%;
         justify-content: center;
         align-items: center;
-        .grid-content {
-          border-radius: 4px;
-        }
         .box-right{
           display: inline-block;
           color: rgb(89,89,89);
