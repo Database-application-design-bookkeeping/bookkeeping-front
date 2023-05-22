@@ -5,14 +5,21 @@ export default createStore({
     token:"",
     username:""
   },
-  getters: {},
+  getters: {
+    getToken(state){
+      return state.token;
+    },
+    getUserName(state){
+      return state.username;
+    }
+  },
   mutations: {
-    set_token(state:any, {token, username}) {
+    setToken(state:any, {token, username}) {
       state.token = token;
       state.username = username;
       localStorage.token = token;
     },
-    del_token(state) {
+    delToken(state) {
       state.token = "";
       state.username = "";
       localStorage.removeItem('token');

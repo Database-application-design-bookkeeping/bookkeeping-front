@@ -76,10 +76,11 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { reactive, ref  } from "vue";
+import { onMounted, reactive, ref  } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import axios from 'axios';
 import { ElMessage } from 'element-plus'
+import store from '@/store';
 let isShowLogin = ref<boolean>(true)
 //界面信息
 let loginMsg = reactive({
@@ -89,17 +90,11 @@ let loginMsg = reactive({
     rightItem:"注册",
     placeholder:"请输入用户名"
 });
-let userMsg = reactive({
-  token:"",
-  username:""
-})
-function setToken(token:string,username:string){
-  if(localStorage.getItem("token")){
-    isShowLogin.value = false
-  }else{
+
+function setStoreMsg(token:string,username:string){
     localStorage.setItem("token",token);
     localStorage.setItem("username",username);
-  }
+    store.commit("setToken",{token,username});
 }
 //清空&初始化表单
 function initForm(){
@@ -159,7 +154,7 @@ function usernameLog(){
   }).then((res:any)=>{
     if(res.data.msg==="登录成功"){
       isShowLogin.value=false;
-      setToken(res.data.data.token,res.data.data.username)
+      setStoreMsg(res.data.data.token,res.data.data.username)
       ElMessage({
         message:res.data.msg,
         type:"success"
@@ -272,9 +267,20 @@ function emailLog(){
       })
   })
 }
+
+//暴露给父组件的判断是否需要登录
+function isLogin(){
+  if(store.getters.token||localStorage.getItem("token")){
+    isShowLogin.value = false;
+  }else{
+    switchLoginMsg("登录",true)
+  }
+}
+
 //暴露切换页面信息的函数
 defineExpose({
-  switchLoginMsg
+  switchLoginMsg,
+  isLogin
 })
 </script>
 

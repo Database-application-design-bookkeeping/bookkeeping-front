@@ -16,7 +16,7 @@
         </el-row>
       </el-header>
       <el-container class="full-height">
-        <el-aside width="220px" class="full-height">
+        <el-aside width="200px" class="full-height">
           <el-menu
         default-active="2"
         class="el-menu-vertical-demo full-height"
@@ -66,7 +66,6 @@
         </el-main>
       </el-container>
     </el-container>
-    
   </div>
   <Login ref="login"></Login>
 </template>
@@ -81,11 +80,14 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import {ref} from "vue"
+import {onMounted, ref} from "vue"
 let login = ref(null)
 function showLoginView(type:string,isSwitch:boolean){
   login.value.switchLoginMsg(type,isSwitch)
 }
+onMounted(()=>{
+  login.value.isLogin();
+})
 </script>
 
 <style lang="scss" scoped>
@@ -110,10 +112,7 @@ function showLoginView(type:string,isSwitch:boolean){
           margin: 0 10px;
         }
       }
-      
     }
-    
-    
     .full-height{
       height: 100%;
     }
