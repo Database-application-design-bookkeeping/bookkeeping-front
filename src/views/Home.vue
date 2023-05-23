@@ -3,12 +3,12 @@
     <el-container class="full-height">
       <el-header class="header-box" height="50px">
         <el-row class="grid-box">
-          <el-col :span="4"></el-col>
-          <el-col :span="4"></el-col>
-          <el-col :span="4"></el-col>
-          <el-col :span="4"></el-col>
-          <el-col :span="4"></el-col>
-          <el-col :span="4" style="min-width: 130px;">
+          <el-col :span="4" style="min-width: 140px;">
+            <div class="title">
+              布克瓶记账
+            </div>
+          </el-col>
+          <el-col :span="4" style="min-width: 120px;">
             <div class="box-login box-right" @click="showLoginView('登录',false)">登录</div>
             <div class="box-item box-right">或</div>
             <div class="box-register box-right" @click="showLoginView('注册',false)">注册</div>
@@ -18,7 +18,7 @@
       <el-container class="full-height">
         <el-aside width="200px" class="full-height">
           <el-menu
-        default-active="2"
+        default-active="1"
         class="el-menu-vertical-demo full-height"
         router="true"
       >
@@ -51,6 +51,7 @@
             <span>设置本月花费计划</span>
           </el-menu-item>
         </el-sub-menu>
+
         <el-menu-item index="/dataview">
           <el-icon><DataLine /></el-icon>
           <span>数据一览</span>
@@ -76,7 +77,7 @@ export default {
   name:"Home",
   components:{
     Login,
-}
+  }
 }
 </script>
 <script setup lang="ts">
@@ -98,8 +99,13 @@ onMounted(()=>{
       text-align: center;
       .grid-box{
         height: 100%;
-        justify-content: center;
+        justify-content:space-between;
         align-items: center;
+        white-space: nowrap;
+        .title{
+          font-weight: 700px;
+          font-size: 24px;
+        }
         .box-right{
           display: inline-block;
           color: rgb(89,89,89);

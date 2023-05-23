@@ -27,6 +27,8 @@
               v-model="ruleForm.username"
               autocomplete="off"
               :placeholder="loginMsg.placeholder"
+              minlength="6"
+              maxlength="20"
             />
           </el-form-item>
           <el-form-item prop="password" v-if="loginMsg.title==='账号密码登录'||loginMsg.type==='注册'">
@@ -77,9 +79,8 @@ export default {
 </script>
 <script setup lang="ts">
 import { reactive, ref  } from "vue";
-import type { FormInstance, FormRules } from "element-plus";
+import type { FormInstance } from "element-plus";
 import axios from 'axios';
-import { ElMessage } from 'element-plus'
 import store from '@/store';
 let isShowLogin = ref<boolean>(true)
 //界面信息
@@ -132,6 +133,7 @@ function switchLoginMsg(data:String,isSwitch?:Boolean){
   initForm()
 }
 const ruleFormRef = ref<FormInstance>();
+const regEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 //表单信息
 const ruleForm = reactive({
@@ -165,23 +167,35 @@ function usernameLog(){
 }
 
 //注册
-function register(){
-  axios({
-    method:"post",
-    url:"/user/regist",
-    data:{
-      "username":ruleForm.username,
-      "password":ruleForm.password,
-      "email":ruleForm.email
+function register() {
+  if (ruleForm.password == ruleForm.checkPass) {
+    if (regEmail.test(ruleForm.email)) {
+      axios({
+        method: "post",
+        url: "/user/regist",
+        data: {
+          "username": ruleForm.username,
+          "password": ruleForm.password,
+          "email": ruleForm.email
+        }
+      }).then((res: any) => {
+        let msg = res.data.msg;
+        if (msg === "注册成功") {
+          store.commit("sucMessage", msg)
+          switchLoginMsg("登录", true)
+        } else {
+          store.commit("warnMessage", msg)
+        }
+      }).catch((err: any) => {
+        store.commit("warnMessage", err)
+      })
+    } else {
+      store.commit("warnMessage", "请输入正确的邮箱")
     }
-  }).then((res:any)=>{
-    if(res.data.msg==="注册成功"){
-      store.commit("sucMessage",res.data.msg)
-      switchLoginMsg("登录",true)
-    }
-  }).catch((err:any)=>{
-    store.commit("warnMessage",err)
-  })
+  } else {
+    store.commit("warnMessage", "两次密码输入结果不同")
+  }
+
 }
 
 //登录方式判断
@@ -214,28 +228,33 @@ function sendVerificationCode(){
     store.commit("warnMessage",err)
   })
 }
-
 //邮箱登录
 function emailLog(){
-  axios({
+  if(regEmail.test(ruleForm.email)){
+    axios({
     url:"/user/loginByEmail",
     data:{
       "email":ruleForm.email,
       "code":ruleForm.verificationCode
     }
   }).then((res:any)=>{
-    if(res.data.msg==="登录成功"){
-      store.commit("sucMessage",res.data.msg)
+    let msg = res.data.msg
+    if(msg==="登录成功"){
+      store.commit("sucMessage",msg)
       isShowLogin.value = false
     }else{
-      store.commit("warnMessage",res.data.msg)
+      store.commit("warnMessage",msg)
     }
   }).catch((err:any)=>{
     store.commit("warnMessage",err)
   })
+  }else{
+    store.commit("warnMessage","请输入正确的邮箱")
+  }
+  
 }
 
-//暴露给父组件的判断是否需要登录
+//判断是否需要登录
 function isLogin(){
   if(store.getters.token||localStorage.getItem("token")){
     isShowLogin.value = false;

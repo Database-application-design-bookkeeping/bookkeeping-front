@@ -57,6 +57,7 @@ function getIncome(type:string){
   }).then((res:any)=>{
     let income = res.data.data
     if(res.data.msg === "查询成功"){
+      total.value = tableData.dayTotal;
       switch(type){
       case "day":{
         tableData.dayTotal = income.total||0;
@@ -87,6 +88,8 @@ function getIncome(type:string){
   })
 }
 let handleClick = (tab: TabsPaneContext) => {
+  console.log("tab",tab);
+  
   switch(tab.paneName){
     case "day":{
       total.value = tableData.dayTotal;
@@ -107,6 +110,7 @@ let handleClick = (tab: TabsPaneContext) => {
   }
 }
 onMounted(()=>{
+  
   getIncome("day")
   getIncome("week")
   getIncome("month")

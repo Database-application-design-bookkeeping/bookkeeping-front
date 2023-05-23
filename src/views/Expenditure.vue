@@ -1,22 +1,22 @@
 <template>
   <div class="expenditure">
     <el-tabs type="border-card" class="demo-tabs" @tab-click="handleClick" v-model="activeName ">
-    <el-tab-pane label="今日收入" name="day">
+    <el-tab-pane label="今日支出" name="day">
       <el-table :data="tableData.dayExpense">
         <ExpenseTableColumn></ExpenseTableColumn>
       </el-table>
     </el-tab-pane>
-    <el-tab-pane label="本周收入" name="week">
+    <el-tab-pane label="本周支出" name="week">
       <el-table :data="tableData.weekExpense">
         <ExpenseTableColumn></ExpenseTableColumn>
       </el-table>
     </el-tab-pane>
-    <el-tab-pane label="本月收入" name="month">
+    <el-tab-pane label="本月支出" name="month">
       <el-table :data="tableData.monthExpense">
         <ExpenseTableColumn></ExpenseTableColumn>
       </el-table>
     </el-tab-pane>
-    <el-tab-pane label="全部收入" name="total">
+    <el-tab-pane label="全部支出" name="total">
       <el-table :data="tableData.totalExpense">
         <ExpenseTableColumn></ExpenseTableColumn>
       </el-table>
@@ -57,6 +57,7 @@ function getExpense(type:string){
   }).then((res:any)=>{
     let expense = res.data.data
     if(res.data.msg==="查询成功"){
+      total.value = tableData.dayTotal;
       switch(type){
       case "day":{
         tableData.dayTotal = expense.total||0;
@@ -82,9 +83,9 @@ function getExpense(type:string){
     }
   }).catch((err:any)=>{
     console.log(err);
-    
   })
 }
+
 let handleClick = (tab: TabsPaneContext) => {
   switch(tab.paneName){
     case "day":{
