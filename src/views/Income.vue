@@ -35,7 +35,7 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { onMounted, reactive,ref } from "vue";
+import { onBeforeUpdate, onMounted, reactive,ref } from "vue";
 import axios from "axios";
 import type { TabsPaneContext } from 'element-plus'
 const activeName = ref("day")
@@ -56,28 +56,34 @@ function getIncome(type:string){
     url:`/income/info/${type}`,
   }).then((res:any)=>{
     let income = res.data.data
-    switch(type){
+    if(res.data.msg === "查询成功"){
+      switch(type){
       case "day":{
-        tableData.dayTotal = income.total;
+        tableData.dayTotal = income.total||0;
         tableData.dayIncome = income.incomeVos;
         break;
       };
       case "week":{
-        tableData.weekTotal = income.total;
+        tableData.weekTotal = income.total||0;
         tableData.weekIncome = income.incomeVos;
         break;
       };
       case "month":{
-        tableData.monthTotal = income.total;
+        tableData.monthTotal = income.total||0;
         tableData.monthIncome = income.incomeVos;
         break;
       };
       case "total":{
-        tableData.total = income.total;
+        tableData.total = income.total||0;
         tableData.totalIncome = income.incomeVos;
         break;
       }
     }
+    }
+    
+  }).catch((err:any)=>{
+    console.log(err);
+    
   })
 }
 let handleClick = (tab: TabsPaneContext) => {

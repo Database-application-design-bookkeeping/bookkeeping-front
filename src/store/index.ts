@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import { ElMessage } from 'element-plus'
 
 export default createStore({
   state: {
@@ -23,7 +24,20 @@ export default createStore({
       state.token = "";
       state.username = "";
       localStorage.removeItem('token');
+      localStorage.removeItem('username');
     },
+    sucMessage(state,msg:string){
+      ElMessage({
+        message:msg,
+        type:"success"
+      })
+    },
+    warnMessage(state,msg:any){
+      ElMessage({
+        message:msg,
+        type:"warning"
+      })
+    }
   },
   actions: {},
   modules: {},

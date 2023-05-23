@@ -76,7 +76,7 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { onMounted, reactive, ref  } from "vue";
+import { reactive, ref  } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import axios from 'axios';
 import { ElMessage } from 'element-plus'
@@ -155,21 +155,12 @@ function usernameLog(){
     if(res.data.msg==="登录成功"){
       isShowLogin.value=false;
       setStoreMsg(res.data.data.token,res.data.data.username)
-      ElMessage({
-        message:res.data.msg,
-        type:"success"
-      })
+      store.commit("sucMessage",res.data.msg)
     }else{
-      ElMessage({
-        message: res.data.msg,
-        type: 'warning',
-  })
+      store.commit("warnMessage",res.data.msg)
     }
   }).catch((err:any)=>{
-    ElMessage({
-        message:err,
-        type:"warning"
-      })
+    store.commit("warnMessage",err)
   })
 }
 
@@ -185,17 +176,11 @@ function register(){
     }
   }).then((res:any)=>{
     if(res.data.msg==="注册成功"){
-      ElMessage({
-        message: res.data.msg,
-        type: 'success',
-      })
+      store.commit("sucMessage",res.data.msg)
       switchLoginMsg("登录",true)
     }
   }).catch((err:any)=>{
-    ElMessage({
-        message:err,
-        type:"warning"
-      })
+    store.commit("warnMessage",err)
   })
 }
 
@@ -221,21 +206,12 @@ function sendVerificationCode(){
     }
   }).then((res:any)=>{
     if(res.data.msg==="邮箱验证码发送成功"){
-      ElMessage({
-        message:res.data.msg,
-        type:"success"
-      });
+      store.commit("sucMessage",res.data.msg)
     }else{
-      ElMessage({
-        message:res.data.msg,
-        type:"warning"
-      })
+      store.commit("warnMessage",res.data.msg)
     }
   }).catch((err:any)=>{
-    ElMessage({
-        message:err,
-        type:"warning"
-      })
+    store.commit("warnMessage",err)
   })
 }
 
@@ -249,22 +225,13 @@ function emailLog(){
     }
   }).then((res:any)=>{
     if(res.data.msg==="登录成功"){
-      ElMessage({
-        message:res.data.msg,
-        type:"success"
-      });
+      store.commit("sucMessage",res.data.msg)
       isShowLogin.value = false
     }else{
-      ElMessage({
-        message:res.data.msg,
-        type:"warning"
-      })
+      store.commit("warnMessage",res.data.msg)
     }
   }).catch((err:any)=>{
-    ElMessage({
-        message:err,
-        type:"warning"
-      })
+    store.commit("warnMessage",err)
   })
 }
 

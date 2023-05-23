@@ -56,28 +56,33 @@ function getExpense(type:string){
     url:`/expense/info/${type}`,
   }).then((res:any)=>{
     let expense = res.data.data
-    switch(type){
+    if(res.data.msg==="查询成功"){
+      switch(type){
       case "day":{
-        tableData.dayTotal = expense.total;
+        tableData.dayTotal = expense.total||0;
         tableData.dayExpense = expense.expenseVos;
         break;
       };
       case "week":{
-        tableData.weekTotal = expense.total;
+        tableData.weekTotal = expense.total||0;
         tableData.weekExpense = expense.expenseVos;
         break;
       };
       case "month":{
-        tableData.monthTotal = expense.total;
+        tableData.monthTotal = expense.total||0;
         tableData.monthExpense = expense.expenseVos;
         break;
       };
       case "total":{
-        tableData.total = expense.total;
+        tableData.total = expense.total||0;
         tableData.totalExpense = expense.expenseVos;
         break;
       };
     }
+    }
+  }).catch((err:any)=>{
+    console.log(err);
+    
   })
 }
 let handleClick = (tab: TabsPaneContext) => {
@@ -106,6 +111,7 @@ onMounted(()=>{
   getExpense("month")
   getExpense("total")
 }) 
+
 </script>
 <style>
 

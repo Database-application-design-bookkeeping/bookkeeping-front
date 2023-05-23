@@ -21,6 +21,16 @@ axios.interceptors.request.use(function (request) {
 }, async function (error) {
     return Promise.reject(error)
 })
+//响应拦截器
+axios.interceptors.response.use(function (response) {
+  console.log();
+  if(response.data.code === 401){
+    store.commit("delToken")
+  }
+    return response
+}, async function (error) {
+    return Promise.reject(error)
+})
 axios.defaults.baseURL = 'http://www.managexpr.com:9001/jizhang';
 app.use(store);
 app.use(router);
