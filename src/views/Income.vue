@@ -88,8 +88,6 @@ function getIncome(type:string){
   })
 }
 let handleClick = (tab: TabsPaneContext) => {
-  console.log("tab",tab);
-  
   switch(tab.paneName){
     case "day":{
       total.value = tableData.dayTotal;
@@ -110,7 +108,6 @@ let handleClick = (tab: TabsPaneContext) => {
   }
 }
 onMounted(()=>{
-  
   getIncome("day")
   getIncome("week")
   getIncome("month")

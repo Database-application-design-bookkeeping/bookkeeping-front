@@ -60,6 +60,10 @@
           <el-icon><setting /></el-icon>
           <span>设置</span>
         </el-menu-item>
+        <el-menu-item index="3">
+          <el-icon><Back /></el-icon>
+          <span>退出登录</span>
+        </el-menu-item>
       </el-menu>
         </el-aside>
         <el-main>
@@ -85,6 +89,9 @@ import {onMounted, ref} from "vue"
 let login = ref(null)
 function showLoginView(type:string,isSwitch:boolean){
   login.value.switchLoginMsg(type,isSwitch)
+}
+function loginOut(){
+  
 }
 onMounted(()=>{
   login.value.isLogin();

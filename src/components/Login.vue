@@ -13,7 +13,7 @@
           status-icon
           class="demo-ruleForm"
         >
-        <el-form-item prop="email" v-if="loginMsg.type==='注册'">
+          <el-form-item prop="email" v-if="loginMsg.title==='邮箱登录'||loginMsg.title==='注册账号'">
             <el-input
               class="login-content"
               v-model="ruleForm.email"
@@ -21,12 +21,12 @@
               placeholder="请输入邮箱"
             />
           </el-form-item>
-          <el-form-item prop="username">
+          <el-form-item prop="username" v-if="loginMsg.title==='账号密码登录'||loginMsg.title==='注册账号'">
             <el-input
               class="login-content"
               v-model="ruleForm.username"
               autocomplete="off"
-              :placeholder="loginMsg.placeholder"
+              placeholder="请输入用户名"
               minlength="6"
               maxlength="20"
             />
@@ -49,7 +49,7 @@
               placeholder="确认密码"
             />
           </el-form-item>
-          <el-form-item prop="email"  v-if="loginMsg.title==='邮箱登录'">
+          <el-form-item prop="verificationCode"  v-if="loginMsg.title==='邮箱登录'">
             <el-input
               class="login-content"
               v-model="ruleForm.verificationCode"
@@ -83,6 +83,10 @@ import type { FormInstance } from "element-plus";
 import axios from 'axios';
 import store from '@/store';
 let isShowLogin = ref<boolean>(true)
+/* let verBtnMsg = ref<string>("发送验证码")
+function waitVer(){
+
+} */
 //界面信息
 let loginMsg = reactive({
     title:"账号密码登录",
@@ -165,6 +169,7 @@ function usernameLog(){
     store.commit("warnMessage",err)
   })
 }
+/* _.debounce(usernameLog,) */
 
 //注册
 function register() {
@@ -214,44 +219,46 @@ function log(){
 //发送邮箱验证码
 function sendVerificationCode(){
   axios({
-    url:"/user/sendCode",
-    data:{
-      "email":ruleForm.email
-    }
+    url:`/user/sendCode?email=${ruleForm.email}`,
   }).then((res:any)=>{
-    if(res.data.msg==="邮箱验证码发送成功"){
-      store.commit("sucMessage",res.data.msg)
-    }else{
-      store.commit("warnMessage",res.data.msg)
-    }
-  }).catch((err:any)=>{
-    store.commit("warnMessage",err)
-  })
-}
-//邮箱登录
-function emailLog(){
-  if(regEmail.test(ruleForm.email)){
-    axios({
-    url:"/user/loginByEmail",
-    data:{
-      "email":ruleForm.email,
-      "code":ruleForm.verificationCode
-    }
-  }).then((res:any)=>{
+    console.log(ruleForm.email);
     let msg = res.data.msg
-    if(msg==="登录成功"){
+    if(msg ==="邮箱验证码发送成功"){
       store.commit("sucMessage",msg)
-      isShowLogin.value = false
+      /* verBtnMsg.value = "" */
     }else{
       store.commit("warnMessage",msg)
     }
   }).catch((err:any)=>{
     store.commit("warnMessage",err)
   })
-  }else{
-    store.commit("warnMessage","请输入正确的邮箱")
+}
+//邮箱登录
+function emailLog() {
+  if (regEmail.test(ruleForm.email)) {
+    axios({
+      method: "post",
+      url: "/user/loginByEmail",
+      data: {
+        "email": ruleForm.email,
+        "code": ruleForm.verificationCode
+      }
+    }).then((res: any) => {
+      let msg = res.data.msg
+      if (msg === "登录成功") {
+        isShowLogin.value = false;
+        setStoreMsg(res.data.data.token, res.data.data.username)
+        store.commit("sucMessage", res.data.msg)
+      } else {
+        store.commit("warnMessage", msg)
+      }
+    }).catch((err: any) => {
+      store.commit("warnMessage", err)
+    })
+  } else {
+    store.commit("warnMessage", "请输入正确的邮箱")
   }
-  
+
 }
 
 //判断是否需要登录
@@ -277,7 +284,7 @@ defineExpose({
   inset: 0px;
   width: 100%;
   height: 100%;
-  z-index: 9999;
+  z-index: 99;
   .mask {
     display: flex;
     align-items: center;

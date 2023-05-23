@@ -6,6 +6,7 @@ import store from "./store";
 import installElementPlus from './plugins/element'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import axios from 'axios'
+import _ from 'lodash'
 const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
@@ -32,6 +33,7 @@ axios.interceptors.response.use(function (response) {
     return Promise.reject(error)
 })
 axios.defaults.baseURL = 'http://www.managexpr.com:9001/jizhang';
+app.use(_);
 app.use(store);
 app.use(router);
 installElementPlus(app);
