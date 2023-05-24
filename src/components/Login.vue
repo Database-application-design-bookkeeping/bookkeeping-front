@@ -79,10 +79,11 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { nextTick, reactive, ref  } from "vue";
+import { inject, reactive, ref  } from "vue";
 import type { FormInstance } from "element-plus";
 import axios from 'axios';
 import store from '@/store';
+const reload = inject("reload") as any
 let isShowLogin = ref<boolean>(true)
 /* let verBtnMsg = ref<string>("发送验证码")
 function waitVer(){
@@ -163,7 +164,7 @@ function usernameLog(){
       isShowLogin.value=false;
       setStoreMsg(res.data.data.token,res.data.data.username)
       store.commit("sucMessage",res.data.msg)
-      nextTick()
+      reload()
     }else{
       store.commit("warnMessage",res.data.msg)
     }
@@ -252,7 +253,7 @@ function emailLog() {
         isShowLogin.value = false;
         setStoreMsg(res.data.data.token, res.data.data.username)
         store.commit("sucMessage", res.data.msg)
-        nextTick()
+        reload()
       } else {
         store.commit("warnMessage", msg)
       }
@@ -269,8 +270,10 @@ function emailLog() {
 function isLogin(){
   if(store.getters.token||localStorage.getItem("token")){
     isShowLogin.value = false;
+    return true
   }else{
     switchLoginMsg("登录",true)
+    return false
   }
 }
 

@@ -16,7 +16,7 @@
               placeholder="修改用户名"
             />
           </el-form-item>
-          <el-form-item prop="password" label="密码">
+          <!-- <el-form-item prop="password" label="密码">
             <el-input
               class="login-content"
               v-model="userForm.password"
@@ -24,7 +24,7 @@
               autocomplete="off"
               placeholder="修改密码"
             />
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item prop="email" label="邮箱">
             <el-input
               class="login-content"
@@ -65,9 +65,9 @@ function saveUserInfo(){
   axios({
     url:"/user/update",
     data:{
-      "username":"123",
-      "password":"123",
-      "email":"xxx@qq.com"
+      "username":userForm.username,
+      /* "password":"123", */
+      "email":userForm.email
     }
   }).then((res:any)=>{
     let msg = res.data.msg

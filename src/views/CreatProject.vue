@@ -40,7 +40,7 @@
 <script setup lang="ts">
 import store from '@/store'
 import axios from 'axios'
-import { reactive } from 'vue'
+import { nextTick, reactive } from 'vue'
 const categorys = [{
             "id": "1",
             "name": "餐饮",
@@ -112,7 +112,7 @@ const categorys = [{
             "type": "收入"
         }];
 const methods = ["微信","支付宝","现金","银行卡转账","股票交易","PayPal","数字货币","其它"];
-const form = reactive({
+let form = reactive({
   amount: '',
   method: '',
   type: '收入',
@@ -121,6 +121,13 @@ const form = reactive({
 })
 
 function clearMethod(){
+  form.category = ""
+}
+function initForm(){
+  form.amount = "",
+  form.method = "",
+  form.type = "收入",
+  form.remark = "",
   form.category = ""
 }
 
@@ -139,7 +146,9 @@ function onSubmit(){
       }).then((res:any)=>{
         let msg = res.data.msg
         if(msg==="保存成功") {
+          initForm()
           store.commit("sucMessage",msg)
+          nextTick()
         }else{
           store.commit("warnMessage",msg)
         }

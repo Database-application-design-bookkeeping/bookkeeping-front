@@ -9,9 +9,11 @@
             </div>
           </el-col>
           <el-col :span="4" style="min-width: 120px;">
-            <div class="box-login box-right" @click="showLoginView('登录',false)">登录</div>
-            <div class="box-item box-right">或</div>
-            <div class="box-register box-right" @click="showLoginView('注册',false)">注册</div>
+            <div class="box-right" v-if="username">欢迎</div>
+            <div class="box-right user-msg" v-if="username"> {{ username }} </div>
+            <div class="box-login box-right" @click="showLoginView('登录',false)" v-if="!username">登录</div>
+            <div class="box-item box-right" v-if="!username">或</div>
+            <div class="box-register box-right" @click="showLoginView('注册',false)" v-if="!username">注册</div>
           </el-col>
         </el-row>
       </el-header>
@@ -60,7 +62,7 @@
           <el-icon><setting /></el-icon>
           <span>设置</span>
         </el-menu-item>
-        <el-menu-item index="3" @click="loginOut">
+        <el-menu-item index="/" @click="loginOut">
           <el-icon><Back /></el-icon>
           <span>退出登录</span>
         </el-menu-item>
@@ -85,13 +87,16 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import {nextTick, onMounted, ref} from "vue"
+import {  onMounted, ref, inject} from "vue"
 import axios from 'axios';
 import store from '@/store';
+const reload = inject("reload") as any
+let username = ref(localStorage.getItem("username"))
 let login = ref(null)
 function showLoginView(type:string,isSwitch:boolean){
   login.value.switchLoginMsg(type,isSwitch)
 }
+
 function loginOut(){
   axios({
     url:"/user/logout"
@@ -100,11 +105,10 @@ function loginOut(){
       store.commit("delToken");
       showLoginView("登录",false);
       store.commit("sucMessage",res.data.msg)
-      nextTick()
     }else{
-      store.commit("warnMessage",res.data.msg)
-      nextTick()
+      store.commit("warnMessage","操作失败")
     }
+    reload()
   })
 }
 onMounted(()=>{
@@ -126,6 +130,9 @@ onMounted(()=>{
         .title{
           font-weight: 700px;
           font-size: 24px;
+        }
+        .user-msg{
+          margin-left: 10px;
         }
         .box-right{
           display: inline-block;
