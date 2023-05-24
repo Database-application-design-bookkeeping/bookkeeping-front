@@ -6,7 +6,7 @@
           status-icon
           class="demo-ruleForm"
         >
-          <el-form-item prop="username">
+          <el-form-item prop="username" label="用户名">
             <el-input
               class="login-content"
               v-model="userForm.username"
@@ -14,7 +14,7 @@
               placeholder="修改用户名"
             />
           </el-form-item>
-          <el-form-item prop="password">
+          <el-form-item prop="password" label="密码">
             <el-input
               class="login-content"
               v-model="userForm.password"
@@ -23,7 +23,7 @@
               placeholder="修改密码"
             />
           </el-form-item>
-          <el-form-item prop="email">
+          <el-form-item prop="email" label="邮箱">
             <el-input
               class="login-content"
               v-model="userForm.email"

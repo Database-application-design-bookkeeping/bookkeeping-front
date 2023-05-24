@@ -9,12 +9,12 @@
     </el-form-item>
     <el-form-item label="方式">
       <el-select v-model="form.method" placeholder="请选择">
-        <el-option v-for="method in form.methods" :key="method" :label="method" :value="method" />
+        <el-option v-for="method in methods" :key="method" :label="method" :value="method" />
       </el-select>
     </el-form-item>
     <el-form-item label="类别">
       <el-select v-model="form.category" placeholder="请选择">
-        <el-option v-for="category in form.categorys.filter((element)=>{return (element.type===form.type)})" :key="category.id" :label="category.name" :value="category.id" />
+        <el-option v-for="category in categorys.filter((element)=>{return (element.type===form.type)})" :key="category.id" :label="category.name" :value="category.id" />
       </el-select>
     </el-form-item>
     <el-form-item
@@ -41,14 +41,7 @@
 import store from '@/store'
 import axios from 'axios'
 import { reactive } from 'vue'
-const form = reactive({
-  amount: '',
-  method: '',
-  methods: ["微信","支付宝","现金","银行卡转账","股票交易","PayPal","数字货币","其它"],
-  type: '收入',
-  remark: '',
-  category: '',
-  categorys:[{
+const categorys = [{
             "id": 1,
             "name": "餐饮",
             "type": "支出"
@@ -117,7 +110,14 @@ const form = reactive({
             "id": 14,
             "name": "其他",
             "type": "收入"
-        }]
+        }];
+const methods = ["微信","支付宝","现金","银行卡转账","股票交易","PayPal","数字货币","其它"];
+const form = reactive({
+  amount: '',
+  method: '',
+  type: '收入',
+  remark: '',
+  category: '',
 })
 
 function onSubmit(){
