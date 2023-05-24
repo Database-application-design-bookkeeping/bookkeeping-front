@@ -2,22 +2,22 @@
   <div class="expenditure">
     <el-tabs type="border-card" class="demo-tabs" @tab-click="handleClick" v-model="activeName ">
     <el-tab-pane label="今日支出" name="day">
-      <el-table :data="tableData.dayExpense">
+      <el-table :data="tableData.dayExpense" stripe>
         <ExpenseTableColumn></ExpenseTableColumn>
       </el-table>
     </el-tab-pane>
     <el-tab-pane label="本周支出" name="week">
-      <el-table :data="tableData.weekExpense">
+      <el-table :data="tableData.weekExpense" stripe>
         <ExpenseTableColumn></ExpenseTableColumn>
       </el-table>
     </el-tab-pane>
     <el-tab-pane label="本月支出" name="month">
-      <el-table :data="tableData.monthExpense">
+      <el-table :data="tableData.monthExpense" stripe>
         <ExpenseTableColumn></ExpenseTableColumn>
       </el-table>
     </el-tab-pane>
     <el-tab-pane label="全部支出" name="total">
-      <el-table :data="tableData.totalExpense">
+      <el-table :data="tableData.totalExpense" stripe>
         <ExpenseTableColumn></ExpenseTableColumn>
       </el-table>
     </el-tab-pane>

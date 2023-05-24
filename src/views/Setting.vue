@@ -4,6 +4,8 @@
           ref="ruleFormRef"
           :model="userForm"
           status-icon
+          label-width="80px"
+          label-position="left"
           class="demo-ruleForm"
         >
           <el-form-item prop="username" label="用户名">

@@ -2,22 +2,22 @@
   <div class="income">
     <el-tabs type="border-card" class="demo-tabs" @tab-click="handleClick" v-model="activeName">
     <el-tab-pane label="今日收入" name="day">
-      <el-table :data="tableData.dayIncome">
+      <el-table :data="tableData.dayIncome" stripe>
         <IncomeTableColumn></IncomeTableColumn>
       </el-table>
     </el-tab-pane>
     <el-tab-pane label="本周收入" name="week">
-      <el-table :data="tableData.weekIncome">
+      <el-table :data="tableData.weekIncome" stripe>
         <IncomeTableColumn></IncomeTableColumn>
       </el-table>
     </el-tab-pane>
     <el-tab-pane label="本月收入" name="month">
-      <el-table :data="tableData.monthIncome">
+      <el-table :data="tableData.monthIncome" stripe>
         <IncomeTableColumn></IncomeTableColumn>
       </el-table>
     </el-tab-pane>
     <el-tab-pane label="全部收入" name="total">
-      <el-table :data="tableData.totalIncome">
+      <el-table :data="tableData.totalIncome" stripe>
         <IncomeTableColumn></IncomeTableColumn>
       </el-table>
     </el-tab-pane>

@@ -1,4 +1,5 @@
 <template>
+  <!-- 登录组件 -->
   <div class="login" v-if="isShowLogin">
     <div class="mask">
       <div class="container">
@@ -78,7 +79,7 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { reactive, ref  } from "vue";
+import { nextTick, reactive, ref  } from "vue";
 import type { FormInstance } from "element-plus";
 import axios from 'axios';
 import store from '@/store';
@@ -162,6 +163,7 @@ function usernameLog(){
       isShowLogin.value=false;
       setStoreMsg(res.data.data.token,res.data.data.username)
       store.commit("sucMessage",res.data.msg)
+      nextTick()
     }else{
       store.commit("warnMessage",res.data.msg)
     }
@@ -233,6 +235,7 @@ function sendVerificationCode(){
     store.commit("warnMessage",err)
   })
 }
+
 //邮箱登录
 function emailLog() {
   if (regEmail.test(ruleForm.email)) {
@@ -249,6 +252,7 @@ function emailLog() {
         isShowLogin.value = false;
         setStoreMsg(res.data.data.token, res.data.data.username)
         store.commit("sucMessage", res.data.msg)
+        nextTick()
       } else {
         store.commit("warnMessage", msg)
       }

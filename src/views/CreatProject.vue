@@ -2,7 +2,7 @@
   <div class="creat-project">
     <el-form :model="form" label-width="120px" label-position="left">
     <el-form-item label="类型">
-      <el-radio-group v-model="form.type">
+      <el-radio-group v-model="form.type" @click="clearMethod">
         <el-radio label="收入" />
         <el-radio label="支出" />
       </el-radio-group>
@@ -42,72 +42,72 @@ import store from '@/store'
 import axios from 'axios'
 import { reactive } from 'vue'
 const categorys = [{
-            "id": 1,
+            "id": "1",
             "name": "餐饮",
             "type": "支出"
         },
         {
-            "id": 2,
+            "id": "2",
             "name": "购物",
             "type": "支出"
         },
         {
-            "id": 3,
+            "id": "3",
             "name": "出行",
             "type": "支出"
         },
         {
-            "id": 4,
+            "id": "4",
             "name": "社交",
             "type": "支出"
         },
         {
-            "id": 5,
+            "id": "5",
             "name": "医疗",
             "type": "支出"
         },
         {
-            "id": 6,
+            "id": "6",
             "name": "礼物",
             "type": "支出"
         },
         {
-            "id": 7,
+            "id": "7",
             "name": "娱乐",
             "type": "支出"
         },
         {
-            "id": 8,
+            "id": "8",
             "name": "学习",
             "type": "支出"
         },
         {
-            "id": 9,
+            "id": "9",
             "name": "其他",
             "type": "支出"
         },
         {
-            "id": 10,
+            "id": "10",
             "name": "工资",
             "type": "收入"
         },
         {
-            "id": 11,
+            "id": "11",
             "name": "理财",
             "type": "收入"
         },
         {
-            "id": 12,
+            "id": "12",
             "name": "礼金",
             "type": "收入"
         },
         {
-            "id": 13,
+            "id": "13",
             "name": "兼职",
             "type": "收入"
         },
         {
-            "id": 14,
+            "id": "14",
             "name": "其他",
             "type": "收入"
         }];
@@ -120,6 +120,10 @@ const form = reactive({
   category: '',
 })
 
+function clearMethod(){
+  form.category = ""
+}
+
 function onSubmit(){
   switch(form.type){
     case "收入":{
@@ -127,7 +131,7 @@ function onSubmit(){
         method:"post",
         url:"/income/save",
         data:{
-          "amount":form.amount,
+          "amount":form.amount+"",
           "categoryId":form.category,
           "remark":form.remark,
 	        "inputMethod":form.method

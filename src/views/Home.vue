@@ -48,7 +48,7 @@
           </el-menu-item>
           <el-menu-item index="/setplan">
             <el-icon><Finished /></el-icon>
-            <span>设置本月花费计划</span>
+            <span>我的消费计划</span>
           </el-menu-item>
         </el-sub-menu>
 
@@ -60,7 +60,7 @@
           <el-icon><setting /></el-icon>
           <span>设置</span>
         </el-menu-item>
-        <el-menu-item index="3">
+        <el-menu-item index="3" @click="loginOut">
           <el-icon><Back /></el-icon>
           <span>退出登录</span>
         </el-menu-item>
@@ -85,13 +85,27 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import {onMounted, ref} from "vue"
+import {nextTick, onMounted, ref} from "vue"
+import axios from 'axios';
+import store from '@/store';
 let login = ref(null)
 function showLoginView(type:string,isSwitch:boolean){
   login.value.switchLoginMsg(type,isSwitch)
 }
 function loginOut(){
-  
+  axios({
+    url:"/user/logout"
+  }).then((res:any)=>{
+    if(res.data.msg==="退出成功"){
+      store.commit("delToken");
+      showLoginView("登录",false);
+      store.commit("sucMessage",res.data.msg)
+      nextTick()
+    }else{
+      store.commit("warnMessage",res.data.msg)
+      nextTick()
+    }
+  })
 }
 onMounted(()=>{
   login.value.isLogin();
