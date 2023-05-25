@@ -22,7 +22,7 @@
       prop="amount"
     >
       <el-input
-        v-model.number="form.amount"
+        v-model="form.amount"
         type="text"
         autocomplete="off"
       />

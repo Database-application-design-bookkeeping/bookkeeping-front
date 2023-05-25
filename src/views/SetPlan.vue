@@ -33,13 +33,10 @@ function getExpection(){
     url:"/expection/info"
   }).then((res:any)=>{
     if(res.data.msg==="查询成功"){
-      console.log(res.data);
-      
       expection.value = res.data.data.amount
     }
   }).catch((err:any)=>{
     console.log(err);
-    
   })
 }
 onMounted(()=>{
