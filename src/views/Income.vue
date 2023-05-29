@@ -81,10 +81,8 @@ function getIncome(type:string){
       }
     }
     }
-    
   }).catch((err:any)=>{
     console.log(err);
-    
   })
 }
 let handleClick = (tab: TabsPaneContext) => {
@@ -108,10 +106,9 @@ let handleClick = (tab: TabsPaneContext) => {
   }
 }
 onMounted(()=>{
-  getIncome("day")
-  getIncome("week")
-  getIncome("month")
-  getIncome("total")
+  ["day","week","month","total"].map((item)=>{
+    getIncome(item);
+  })
 }) 
 </script>
 <style>

@@ -25,28 +25,34 @@ export default {
 </script>
 <script setup lang="ts">
 import axios from "axios";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive } from "vue";
 //用来存储用户金额量信息
+enum amountValue {
+  day = 0,
+  week = 0,
+  month = 0,
+  total = 0
+}
 let userAmount = reactive({
   income: {
-    day: 0,
-    week: 0,
-    month: 0,
-    total: 0,
+    day: amountValue.day,
+    week: amountValue.week,
+    month: amountValue.month,
+    total: amountValue.total,
     titles: ["今日收入", "本周收入", "本月收入", "总收入"]
   },
   expense: {
-    day: 0,
-    week: 0,
-    month: 0,
-    total: 0,
+    day: amountValue.day,
+    week: amountValue.week,
+    month: amountValue.month,
+    total: amountValue.total,
     titles: ["今日支出", "本周支出", "本月支出", "总支出"]
   },
   balance: {
-    day: 0,
-    week: 0,
-    month: 0,
-    total: 0,
+    day: amountValue.day,
+    week: amountValue.week,
+    month: amountValue.month,
+    total: amountValue.total,
     titles: ["今日收益", "本周收益", "本月收益", "总收益"]
   }
 })

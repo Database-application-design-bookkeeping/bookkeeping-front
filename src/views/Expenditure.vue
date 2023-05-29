@@ -107,10 +107,9 @@ let handleClick = (tab: TabsPaneContext) => {
   }
 }
 onMounted(()=>{
-  getExpense("day")
-  getExpense("week")
-  getExpense("month")
-  getExpense("total")
+  ["day","week","month","total"].map((item)=>{
+    getExpense(item);
+  })
 }) 
 
 </script>

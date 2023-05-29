@@ -23,7 +23,7 @@ import { PieChart, PieSeriesOption } from 'echarts/charts';
 import { LabelLayout } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
 import axios from "axios";
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive } from "vue";
 //用于图表展示的数据数组对象
 //对象格式为：{value:xxx,name:xxx}
 let expenseChartData = <any>[];
@@ -199,7 +199,7 @@ function initCharts(dom:any,data:any,title:string) {
         name: '类别',
         type: 'pie',
         radius: '50%',
-        data: data,
+        data: data.map((item:any)=>{if(item.value!=0)return item}),
         emphasis: {
           itemStyle: {
             shadowBlur: 10,

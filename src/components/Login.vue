@@ -22,7 +22,7 @@
               placeholder="请输入邮箱"
             />
           </el-form-item>
-          <el-form-item prop="username" v-if="loginMsg.title==='账号密码登录'||loginMsg.title==='注册账号'">
+          <el-form-item prop="username" v-if="loginMsg.title==='账号登录'||loginMsg.title==='注册账号'">
             <el-input
               class="login-content"
               v-model="ruleForm.username"
@@ -32,7 +32,7 @@
               maxlength="20"
             />
           </el-form-item>
-          <el-form-item prop="password" v-if="loginMsg.title==='账号密码登录'||loginMsg.type==='注册'">
+          <el-form-item prop="password" v-if="loginMsg.title == '账号登录'||loginMsg.type==='注册'">
             <el-input
               class="login-content"
               v-model="ruleForm.password"
@@ -85,17 +85,24 @@ import axios from 'axios';
 import store from '@/store';
 const reload = inject("reload") as any
 let isShowLogin = ref<boolean>(true)
-/* let verBtnMsg = ref<string>("发送验证码")
-function waitVer(){
 
-} */
+enum textMsg {
+  login = "登录",
+  signup = "注册",
+  loginByUsername = "账号登录",
+  loginByEmail = "邮箱登录",
+  title_signup = "注册账号",
+  placeholder_user = "请输入用户名",
+  placeholder_email = "请输入邮箱"
+}
+
 //界面信息
 let loginMsg = reactive({
-    title:"账号密码登录",
-    type:"登录",
-    leftItem:"邮箱登录",
-    rightItem:"注册",
-    placeholder:"请输入用户名"
+    title:textMsg.loginByUsername,
+    type:textMsg.login,
+    leftItem:textMsg.loginByEmail,
+    rightItem:textMsg.signup,
+    placeholder:textMsg.placeholder_user
 });
 
 function setStoreMsg(token:string,username:string){
@@ -115,29 +122,30 @@ function initForm(){
 //切换界面信息
 function switchLoginMsg(data:String,isSwitch?:Boolean){
   isShowLogin.value = true;
-  if(data==="登录"||data===""){
-    if(loginMsg.leftItem==="账号登录"){
-      loginMsg.title = "账号密码登录";
-      loginMsg.type = "登录";
-      loginMsg.leftItem = "邮箱登录";
-      loginMsg.rightItem = "注册";
-      loginMsg.placeholder="请输入用户名"
-    }else if(loginMsg.leftItem==="邮箱登录"&&isSwitch){
-      loginMsg.title = "邮箱登录";
-      loginMsg.type = "登录";
-      loginMsg.leftItem = "账号登录";
-      loginMsg.rightItem = "注册";
-      loginMsg.placeholder = "请输入邮箱"
+  if(data == "登录" || data == ""){
+    if(loginMsg.leftItem == "账号登录"){
+      loginMsg.title = textMsg.loginByUsername;
+      loginMsg.type = textMsg.login;
+      loginMsg.leftItem = textMsg.loginByEmail;
+      loginMsg.rightItem = textMsg.signup;
+      loginMsg.placeholder = textMsg.placeholder_user
+    }else if(loginMsg.leftItem == "邮箱登录" && isSwitch){
+      loginMsg.title = textMsg.loginByEmail;
+      loginMsg.type = textMsg.login;
+      loginMsg.leftItem = textMsg.loginByUsername;
+      loginMsg.rightItem = textMsg.signup;
+      loginMsg.placeholder = textMsg.placeholder_email
     }
-  }else if(data==="注册"){
-      loginMsg.title = "注册账号";
-      loginMsg.type = "注册";
-      loginMsg.leftItem = "账号登录";
-      loginMsg.rightItem = "注册";
-      loginMsg.placeholder = "请输入用户名"
+  }else if(data == "注册"){
+      loginMsg.title = textMsg.title_signup;
+      loginMsg.type = textMsg.signup;
+      loginMsg.leftItem = textMsg.loginByUsername;
+      loginMsg.rightItem = textMsg.signup;
+      loginMsg.placeholder = textMsg.placeholder_user
   }
   initForm()
 }
+
 const ruleFormRef = ref<FormInstance>();
 const regEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -160,7 +168,7 @@ function usernameLog(){
       "password":ruleForm.password
     }
   }).then((res:any)=>{
-    if(res.data.msg==="登录成功"){
+    if(res.data.msg == "登录成功"){
       isShowLogin.value=false;
       setStoreMsg(res.data.data.token,res.data.data.username)
       store.commit("sucMessage",res.data.msg)
@@ -172,7 +180,6 @@ function usernameLog(){
     store.commit("warnMessage",err)
   })
 }
-/* _.debounce(usernameLog,) */
 
 //注册
 function register() {
@@ -188,7 +195,7 @@ function register() {
         }
       }).then((res: any) => {
         let msg = res.data.msg;
-        if (msg === "注册成功") {
+        if (msg == "注册成功") {
           store.commit("sucMessage", msg)
           switchLoginMsg("登录", true)
         } else {
@@ -203,18 +210,17 @@ function register() {
   } else {
     store.commit("warnMessage", "两次密码输入结果不同")
   }
-
 }
 
 //登录方式判断
 function log(){
-  if(loginMsg.type==="登录"){
-    if(loginMsg.title==="账号密码登录"){
+  if(loginMsg.type == "登录"){
+    if(loginMsg.title == "账号登录"){
       usernameLog();
-    }else if(loginMsg.title==="邮箱登录"){
+    }else if(loginMsg.title == "邮箱登录"){
       emailLog();
     }
-  }else if(loginMsg.type==="注册"){
+  }else if(loginMsg.type == "注册"){
     register();
   }
 }
@@ -224,9 +230,8 @@ function sendVerificationCode(){
   axios({
     url:`/user/sendCode?email=${ruleForm.email}`,
   }).then((res:any)=>{
-    console.log(ruleForm.email);
     let msg = res.data.msg
-    if(msg ==="邮箱验证码发送成功"){
+    if(msg == "邮箱验证码发送成功"){
       store.commit("sucMessage",msg)
       /* verBtnMsg.value = "" */
     }else{
@@ -249,7 +254,7 @@ function emailLog() {
       }
     }).then((res: any) => {
       let msg = res.data.msg
-      if (msg === "登录成功") {
+      if (msg == "登录成功") {
         isShowLogin.value = false;
         setStoreMsg(res.data.data.token, res.data.data.username)
         store.commit("sucMessage", res.data.msg)
@@ -263,16 +268,16 @@ function emailLog() {
   } else {
     store.commit("warnMessage", "请输入正确的邮箱")
   }
-
 }
 
 //判断是否需要登录
 function isLogin(){
-  if(store.getters.token||localStorage.getItem("token")){
+  if(store.getters.token || localStorage.getItem("token")){
     isShowLogin.value = false;
     return true
   }else{
-    switchLoginMsg("登录",true)
+    // 第二个参数为false的作用是让账号登录为默认登录方式
+    switchLoginMsg("登录",false)
     return false
   }
 }

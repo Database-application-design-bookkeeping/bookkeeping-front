@@ -183,7 +183,3 @@ function onSubmit(){
 }
 
 </script>
-
-<style>
-
-</style>
