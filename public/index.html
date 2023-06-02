@@ -7,13 +7,24 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title>布克瓶记账</title>
     <style>
-      *{
+      * {
         padding: 0;
         margin: 0;
       }
-      html,body,#app{
+    
+      html,
+      body,
+      #app {
         width: 100%;
         height: 100%;
+      }
+    
+      input:-webkit-autofill,
+      input:-webkit-autofill:hover,
+      input:-webkit-autofill:focus,
+      input:-webkit-autofill:active {
+        -webkit-transition-delay: 111111s;
+        -webkit-transition: color 111111s ease-out, background-color 111111s ease-out;
       }
     </style>
   </head>
