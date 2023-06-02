@@ -22,7 +22,7 @@
           <el-menu
         default-active="1"
         class="el-menu-vertical-demo full-height"
-        router="true"
+        router
       >
         <el-sub-menu index="1">
           <template #title>
